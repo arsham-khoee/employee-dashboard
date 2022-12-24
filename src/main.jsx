@@ -2,10 +2,13 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import "./index.css"
+import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
 import DepartmentsPage from "./pages/DepartmentsPage"
 import EmployeesPage from "./pages/EmployeesPage"
 import ErrorPage from "./pages/ErrorPage"
+import LoginPage from "./pages/LoginPage"
+import SignupPage from "./pages/SignupPage"
 
 const router = createBrowserRouter([
   {
@@ -25,43 +28,23 @@ const router = createBrowserRouter([
         path: "departments",
         element: <DepartmentsPage />,
       },
-      // {
-      //   path: "startups",
-      //   element: <StartupsPage />,
-      // },
-      // {
-      //   path: "apply-process",
-      //   element: <ApplyPage />,
-      // },
-      // {
-      //   path: "services",
-      //   element: <ServicesPage />,
-      // },
-      // {
-      //   path: "faq",
-      //   element: <FaqPage />,
-      // },
-      // {
-      //   path: "contact-us",
-      //   element: <ContactPage />,
-      // },
     ],
   },
-  // {
-  //   path: "/auth",
-  //   element: <AuthLayout />,
-  //   errorElement: <ErrorPage />,
-  //   children: [
-  //     {
-  //       path: "login",
-  //       element: <LoginPage />,
-  //     },
-  //     {
-  //       path: "signup",
-  //       element: <SignupPage />,
-  //     },
-  //   ],
-  // },
+  {
+    path: "/auth",
+    element: <AuthLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "signup",
+        element: <SignupPage />,
+      },
+    ],
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(
