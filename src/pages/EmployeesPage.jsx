@@ -2,13 +2,23 @@ import { Box } from "@mui/system"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import EmployeesTable from "../components/EmployeesTable"
+import { useEffect } from "react"
+import { getAllEmployees } from "../services/employee"
 
 const handleSearch = (e) => {
   if (e.key === "Enter") console.log("Do search")
-} 
-
+}
 
 function EmployeesPage() {
+  useEffect(() => {
+    const getEmployees = async () => {
+      const data = await getAllEmployees()
+      console.log(data)
+    }
+
+    getEmployees()
+  }, [])
+
   return (
     <>
       <Box

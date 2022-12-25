@@ -9,30 +9,46 @@ import Box from "@mui/material/Box"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
-import { Link as RouterLink } from "react-router-dom"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
 import validateEmail from "../utils/validateEmail"
 import validatePassword from "../utils/validatePassword"
+import { signup } from "../services/auth"
 
 export default function LoginPage() {
+  const navigate = useNavigate()
   const [isEmailVaild, setIsEmailVaild] = useState(true)
   const [isPasswordVaild, setIsPasswordVaild] = useState(true)
   const [isPasswordMatch, setIsPasswordMatch] = useState(true)
 
   const checkPasswordMatching = (pass, confPass) => pass === confPass
 
-  const handleSubmit = (event) => {
+  const handleSignup = async (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    })
+
     setIsEmailVaild(validateEmail(data.get("email")))
     setIsPasswordVaild(validatePassword(data.get("password")))
 
     const pass = document.getElementById("password").value
     const confPass = document.getElementById("confirm-password").value
-    setIsPasswordMatch(checkPasswordMatching(pass, confPass))
+    const areMatch = checkPasswordMatching(pass, confPass)
+
+    setIsPasswordMatch(areMatch)
+
+    try {
+      if (isEmailVaild && isPasswordVaild && areMatch) {
+        const payload = await signup({
+          email: data.get("email"),
+          password: data.get("password"),
+        })
+
+        console.log(payload)
+
+        navigate("/auth/login")
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
@@ -52,7 +68,7 @@ export default function LoginPage() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSignup} noValidate sx={{ mt: 1 }}>
           <TextField
             error={!isEmailVaild}
             helperText={isEmailVaild ? null : "Invalid email address."}
