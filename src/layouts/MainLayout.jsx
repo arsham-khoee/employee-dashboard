@@ -9,7 +9,8 @@ import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import ListItemText from "@mui/material/ListItemText"
-import PersonIcon from "@mui/icons-material/Person"
+import Diversity3Icon from "@mui/icons-material/Diversity3"
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import ApartmentIcon from "@mui/icons-material/Apartment"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { Link, Outlet } from "react-router-dom"
@@ -19,11 +20,15 @@ const drawerWidth = 200
 const navMenu = [
   {
     label: "Employees",
-    icon: <PersonIcon />,
+    icon: <Diversity3Icon />,
   },
   {
     label: "Departments",
     icon: <ApartmentIcon />,
+  },
+  {
+    label: "Profile",
+    icon: <ManageAccountsIcon />,
   },
   {
     label: "Logout",
@@ -71,7 +76,7 @@ export default function ClippedDrawer() {
                 style={{
                   textDecoration: "none",
                   color: "inherit",
-                  marginTop: index === 2 ? "auto" : "",
+                  marginTop: index === 3 ? "auto" : "",
                 }}
                 to={item.label}
               >
