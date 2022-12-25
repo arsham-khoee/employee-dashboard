@@ -23,14 +23,17 @@ export default function LoginPage() {
   const handleLogin = async (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    })
-    const response = await login({
-      email: data.get("email"),
-      password: data.get("password"),
-    })
+
+    try {
+      const response = await login({
+        email: data.get("email"),
+        password: data.get("password"),
+      })
+
+      if (response.token) dispatch({ type: "LOGIN", response })
+    } catch (err) {
+      console.error(err)
+    }
 
     console.log(response)
   }

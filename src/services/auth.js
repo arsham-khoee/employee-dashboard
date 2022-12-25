@@ -1,8 +1,8 @@
-import axios from "axios"
+import axiosInstance from "../../axios.config"
 
 const login = async (inputs) => {
   try {
-    const { data } = await axios.post("/login", inputs)
+    const { data } = await axiosInstance.post("/login", inputs)
     return Promise.resolve(data)
   } catch (err) {
     console.error(err)

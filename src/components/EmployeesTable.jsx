@@ -14,6 +14,8 @@ import Paper from "@mui/material/Paper"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import EditIcon from "@mui/icons-material/Edit"
+import { Button, Modal } from "@mui/material"
+import TheModal from "./TheModal"
 
 function createData(
   firstName,
@@ -35,9 +37,33 @@ function createData(
   }
 }
 
-function Row(props) {
-  const { row } = props
+// Row.propTypes = {
+//   row: PropTypes.shape({
+//     firstName: PropTypes.string.isRequired,
+//     lastName: PropTypes.string.isRequired,
+//     email: PropTypes.string.isRequired,
+//     address: PropTypes.string.isRequired,
+//     role: PropTypes.string.isRequired,
+//     jobTitle: PropTypes.string.isRequired,
+//     history: PropTypes.arrayOf(
+//       PropTypes.shape({
+//         previousDepartment: PropTypes.string.isRequired,
+//         currentDepartment: PropTypes.string.isRequired,
+//         assignor: PropTypes.string.isRequired,
+//         date: PropTypes.string.isRequired,
+//       })
+//     ).isRequired,
+//   }).isRequired
+//   setSelectedEmployee
+// }
+
+function Row({ row, setSelectedEmployee }) {
+  // const { row } = props
   const [open, setOpen] = useState(false)
+
+  const handleEdit = (row) => {
+    console.log(row)
+  }
 
   return (
     <>
@@ -57,15 +83,15 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row.lastName}
         </TableCell>
-        <TableCell align="right">{row.email}</TableCell>
-        <TableCell align="right">{row.address}</TableCell>
-        <TableCell align="right">{row.role}</TableCell>
-        <TableCell align="right">{row.jobTitle}</TableCell>
+        <TableCell>{row.email}</TableCell>
+        <TableCell>{row.address}</TableCell>
+        <TableCell>{row.role}</TableCell>
+        <TableCell>{row.jobTitle}</TableCell>
         <TableCell>
           <IconButton
             aria-label="edit"
             size="small"
-            onClick={() => console.log("edit")}
+            onClick={() => setSelectedEmployee(row)}
           >
             <EditIcon />
           </IconButton>
@@ -83,9 +109,8 @@ function Row(props) {
                   <TableRow>
                     <TableCell>Date</TableCell>
                     <TableCell>Assignor</TableCell>
-                    <TableCell align="right">Previous Department</TableCell>
-                    <TableCell align="right">Current Department</TableCell>
-                    {/* <TableCell align="right">Total price ($)</TableCell> */}
+                    <TableCell>Previous Department</TableCell>
+                    <TableCell>Current Department</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -95,15 +120,8 @@ function Row(props) {
                         {historyRow.date}
                       </TableCell>
                       <TableCell>{historyRow.assignor}</TableCell>
-                      <TableCell align="right">
-                        {historyRow.previousDepartment}
-                      </TableCell>
-                      <TableCell align="right">
-                        {historyRow.currentDepartment}
-                      </TableCell>
-                      {/* <TableCell align="right">
-                        // {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell> */}
+                      <TableCell>{historyRow.previousDepartment}</TableCell>
+                      <TableCell>{historyRow.currentDepartment}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -114,25 +132,6 @@ function Row(props) {
       </TableRow>
     </>
   )
-}
-
-Row.propTypes = {
-  row: PropTypes.shape({
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    address: PropTypes.string.isRequired,
-    role: PropTypes.string.isRequired,
-    jobTitle: PropTypes.string.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        previousDepartment: PropTypes.string.isRequired,
-        currentDepartment: PropTypes.string.isRequired,
-        assignor: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-  }).isRequired,
 }
 
 const rows = [
@@ -146,28 +145,54 @@ const rows = [
   ]),
 ]
 
-export default function CollapsibleTable() {
+export default function EmployeesTable() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedEmployee, setSelectedEmployee] = useState(null)
+
+  const handleModal = () => {
+    setIsModalOpen(true)
+  }
+
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>First Name</TableCell>
-            <TableCell align="right">Last Name</TableCell>
-            <TableCell align="right">Email</TableCell>
-            <TableCell align="right">Address</TableCell>
-            <TableCell align="right">Role</TableCell>
-            <TableCell align="right">Job Title</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.email} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>First Name</TableCell>
+              <TableCell>Last Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Address</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Job Title</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <Row
+                key={row.email}
+                row={row}
+                setSelectedEmployee={setSelectedEmployee}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Button onClick={handleModal}>Open modal</Button>
+      <TheModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
+        <Box
+          sx={{
+            width: "min(90%, 800px)",
+            backgroundColor: "#fff",
+            padding: "20px",
+          }}
+        >
+          <div>{selectedEmployee}</div>
+        </Box>
+      </TheModal>
+    </>
   )
 }
