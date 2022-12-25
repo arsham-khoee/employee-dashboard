@@ -1,6 +1,13 @@
 import { Box } from "@mui/system"
 import Button from "@mui/material/Button"
-import EmployeesTable from '../components/EmployeesTable'
+import TextField from "@mui/material/TextField"
+import EmployeesTable from "../components/EmployeesTable"
+
+const handleSearch = (e) => {
+  if (e.key === "Enter") console.log("Do search")
+} 
+
+
 function EmployeesPage() {
   return (
     <>
@@ -8,12 +15,21 @@ function EmployeesPage() {
         sx={{
           display: "flex",
           gap: "10",
-          justifyContent: "flex-end",
-          marginBottom: "24px"
+          alignItems: "center",
+          marginBottom: "24px",
         }}
       >
-        <Button>Import CSV</Button>
-        <Button>Add Manually</Button>
+        <TextField
+          id="search"
+          label="Search table entries..."
+          type="search"
+          variant="standard"
+          onKeyDown={handleSearch}
+        />
+        <Box sx={{ marginLeft: "auto" }}>
+          <Button>Import CSV</Button>
+          <Button>Add Manually</Button>
+        </Box>
       </Box>
       <Box>
         <EmployeesTable />
