@@ -14,20 +14,25 @@ import Container from "@mui/material/Container"
 import { Link as RouterLink } from "react-router-dom"
 import validateEmail from "../utils/validateEmail"
 import validatePassword from "../utils/validatePassword"
+import { login } from "../services"
 
 export default function LoginPage() {
   const [isEmailVaild, setIsEmailVaild] = useState(true)
-  const [isPasswordVaild, setIsPasswordVaild] = useState(true)
+  // const [isPasswordVaild, setIsPasswordVaild] = useState(true)
 
-  const handleSubmit = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     })
-    setIsEmailVaild(validateEmail(data.get("email")))
-    setIsPasswordVaild(validatePassword(data.get("password")))
+    const response = await login({
+      email: data.get("email"),
+      password: data.get("password"),
+    })
+
+    console.log(response)
   }
 
   return (
@@ -48,7 +53,7 @@ export default function LoginPage() {
         <Typography component="h1" variant="h5">
           Log in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
           <TextField
             error={!isEmailVaild}
             helperText={isEmailVaild ? null : "Invalid email address."}
@@ -90,9 +95,9 @@ export default function LoginPage() {
               </Link>
             </Grid> */}
             {/* <Grid item> */}
-              <Link to="/auth/signup" variant="body2" component={RouterLink}>
-                Don't have an account? Sign Up
-              </Link>
+            <Link to="/auth/signup" variant="body2" component={RouterLink}>
+              Don't have an account? Sign Up
+            </Link>
             {/* </Grid> */}
           </Grid>
         </Box>

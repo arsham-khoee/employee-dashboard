@@ -14,7 +14,7 @@ import ApartmentIcon from "@mui/icons-material/Apartment"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { Link, Outlet } from "react-router-dom"
 
-const drawerWidth = 240
+const drawerWidth = 200
 
 const navMenu = [
   {
@@ -67,6 +67,7 @@ export default function ClippedDrawer() {
           >
             {navMenu.map((item, index) => (
               <Link
+                key={index}
                 style={{
                   textDecoration: "none",
                   color: "inherit",
