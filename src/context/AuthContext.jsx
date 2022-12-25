@@ -31,15 +31,15 @@ const initState = () => {
 }
 
 const saveToken = (state, { payload }) => {
-    const { employee, token } = payload
+    const { user, token } = payload
     const headers = { authorization: token }
-    localStorage.setItem('employee', JSON.stringify(employee))
+    localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('token', JSON.stringify(token))
     return {
         ...state,
         token,
         headers,
-        employee,
+        user,
         isAuth: true,
     }
 }

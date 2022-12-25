@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Avatar from "@mui/material/Avatar"
 import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
@@ -11,31 +11,36 @@ import Box from "@mui/material/Box"
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
-import { Link as RouterLink } from "react-router-dom"
+import { Link as RouterLink, redirect, useNavigate } from "react-router-dom"
 import validateEmail from "../utils/validateEmail"
 import validatePassword from "../utils/validatePassword"
 import { login } from "../services"
+import { useAuth } from "../context/AuthContext"
 
 export default function LoginPage() {
   const [isEmailVaild, setIsEmailVaild] = useState(true)
-  // const [isPasswordVaild, setIsPasswordVaild] = useState(true)
+  const { dispatch, isAuth } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuth) navigate("/employees")
+  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
 
     try {
-      const response = await login({
+      const payload = await login({
         email: data.get("email"),
         password: data.get("password"),
       })
+      if (payload.token) dispatch({ type: "LOGIN", payload })
 
-      if (response.token) dispatch({ type: "LOGIN", response })
+      navigate("/employees")
     } catch (err) {
       console.error(err)
     }
-
-    console.log(response)
   }
 
   return (
