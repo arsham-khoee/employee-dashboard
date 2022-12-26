@@ -16,7 +16,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import EditIcon from "@mui/icons-material/Edit"
 import { Button, Modal, TextField } from "@mui/material"
 import TheModal from "./TheModal"
-import { getHistoryById } from "../services/employee"
+import { getHistoryById, updateEmployee, deleteEmployee} from "../services/employee"
 import { useAuth } from "../context/AuthContext"
 
 function createData(
@@ -42,7 +42,9 @@ function createData(
 function Row({ row, setSelectedEmployee, openModal }) {
   const [open, setOpen] = useState(false)
   const [history, setHistory] = useState([])
-  const { headers } = useAuth()
+  const { headers, user } = useAuth()
+  console.log('fuck you')
+  console.log(user)
 
   const handleEdit = (row) => {
     setSelectedEmployee(row)
@@ -56,6 +58,7 @@ function Row({ row, setSelectedEmployee, openModal }) {
     console.log("history", data)
     setOpen(!open)
   }
+
 
   return (
     <>
@@ -83,6 +86,7 @@ function Row({ row, setSelectedEmployee, openModal }) {
           <IconButton
             aria-label="edit"
             size="small"
+            disabled={user.role !== 'ADMIN'}
             onClick={() => handleEdit(row)}
           >
             <EditIcon />
@@ -99,7 +103,6 @@ function Row({ row, setSelectedEmployee, openModal }) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    {/* <TableCell>Date</TableCell> */}
                     <TableCell>Assignor</TableCell>
                     <TableCell>Previous Department</TableCell>
                     <TableCell>Current Department</TableCell>
@@ -108,9 +111,6 @@ function Row({ row, setSelectedEmployee, openModal }) {
                 <TableBody>
                   {history.map((historyRow) => (
                     <TableRow key={historyRow.id}>
-                      {/* <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell> */}
                       <TableCell>{historyRow.assignor.email}</TableCell>
                       <TableCell>
                         {historyRow.previousDepartment
@@ -130,13 +130,33 @@ function Row({ row, setSelectedEmployee, openModal }) {
   )
 }
 
-export default function EmployeesTable({ employees }) {
+export default function EmployeesTable({ employees, setEmployees }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState(null)
+  const { headers } = useAuth()
 
-  const handleUpdate = (e) => {
-    e.preventDefault()
-    console.log("selectedEmployee", selectedEmployee)
+  const handleUpdate = async (e) => {
+    try {
+      e.preventDefault()
+      console.log("selectedEmployee", selectedEmployee)
+      const data = await updateEmployee(selectedEmployee.id, selectedEmployee, headers)
+      setEmployees(prev => prev.map(item => item.id == selectedEmployee.id ? selectedEmployee : item ))
+      setIsModalOpen(false)
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  const handleDelete = async(e) => {
+    try {
+      e.preventDefault()
+      await deleteEmployee(selectedEmployee.id, headers)
+      setEmployees(prev => prev.filter(item => item.id !== selectedEmployee.id))
+      setIsModalOpen(false)
+    } catch(e) {
+      console.log('error')
+      console.log(e)
+    }
   }
 
   return (
@@ -273,7 +293,7 @@ export default function EmployeesTable({ employees }) {
             <Button variant="contained" type="submit">
               Update
             </Button>
-            <Button variant="outlined" color="error">
+            <Button onClick={(e) => handleDelete(e)}  variant="outlined" color="error">
               Delete
             </Button>
           </Box>

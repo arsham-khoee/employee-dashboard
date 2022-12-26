@@ -17,15 +17,15 @@ const reducer = (state, action) => {
 const initState = () => {
     const token = localStorage.getItem('token')
     let headers = null
-    let employee = localStorage.getItem('employee')
-    employee = JSON.parse(employee)
+    let user = localStorage.getItem('employee')
+    user = JSON.parse(user)
     if(token) {
         headers = { authorization: token }
     }
     return {
         token,
         headers,
-        employee,
+        user,
         isAuth: !!token,
     }
 }
@@ -48,7 +48,7 @@ const clearToken = () => {
     localStorage.clear()
     return {
         isAuth: false,
-        employee: null,
+        user: null,
         token: null,
     }
 }

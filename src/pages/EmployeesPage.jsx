@@ -58,7 +58,7 @@ function EmployeesPage() {
         </Box>
       </Box>
       <Box>
-        <EmployeesTable employees={employees} />
+        <EmployeesTable setEmployees={setEmployees} employees={employees} />
       </Box>
     </>
   )

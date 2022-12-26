@@ -26,12 +26,12 @@ const getHistoryById = async (id, headers) => {
   }
 }
 
-const updateEmployee = async (id, userData, headers) => {
+const updateEmployee = async (id, {firstName, lastName, role, address}, headers) => {
   try {
     const { data } = await axiosInstance({
       method: "PATCH",
       url: `/employees/${id}`,
-      data: userData,
+      data: {firstName, lastName, role, address},
       headers,
     })
     return Promise.resolve(data)
@@ -41,4 +41,18 @@ const updateEmployee = async (id, userData, headers) => {
   }
 }
 
-export { getAllEmployees, getHistoryById, updateEmployee }
+const deleteEmployee = async(id, headers) => {
+  try {
+    const { data } = await axiosInstance({
+      method: 'DELETE',
+      url: `/employees/${id}`,
+      headers,
+    })
+    return Promise.resolve(data)
+  } catch(e) {
+    console.error(e)
+    return Promise.reject(e)
+  }
+}
+
+export { getAllEmployees, getHistoryById, updateEmployee, deleteEmployee }
