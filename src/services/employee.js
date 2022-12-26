@@ -4,7 +4,20 @@ const getAllEmployees = async (headers) => {
   try {
     const { data } = await axiosInstance({
       url: "/employees",
-      headers
+      headers,
+    })
+    return Promise.resolve(data)
+  } catch (err) {
+    console.error(err)
+    return Promise.reject(err)
+  }
+}
+
+const getEmployeesByDepartment = async (id, headers) => {
+  try {
+    const { data } = await axiosInstance({
+      url: `/employees/department/${id}`,
+      headers,
     })
     return Promise.resolve(data)
   } catch (err) {
@@ -17,21 +30,6 @@ const getHistoryById = async (id, headers) => {
   try {
     const { data } = await axiosInstance({
       url: `/employees/${id}/changes`,
-      headers
-    })
-    return Promise.resolve(data)
-  } catch(err) {
-    console.error(err)
-    return Promise.reject(err)
-  }
-}
-
-const updateEmployee = async (id, {firstName, lastName, role, address}, headers) => {
-  try {
-    const { data } = await axiosInstance({
-      method: "PATCH",
-      url: `/employees/${id}`,
-      data: {firstName, lastName, role, address},
       headers,
     })
     return Promise.resolve(data)
@@ -41,18 +39,43 @@ const updateEmployee = async (id, {firstName, lastName, role, address}, headers)
   }
 }
 
-const deleteEmployee = async(id, headers) => {
+const updateEmployee = async (
+  id,
+  { firstName, lastName, role, address },
+  headers
+) => {
   try {
     const { data } = await axiosInstance({
-      method: 'DELETE',
+      method: "PATCH",
+      url: `/employees/${id}`,
+      data: { firstName, lastName, role, address },
+      headers,
+    })
+    return Promise.resolve(data)
+  } catch (err) {
+    console.error(err)
+    return Promise.reject(err)
+  }
+}
+
+const deleteEmployee = async (id, headers) => {
+  try {
+    const { data } = await axiosInstance({
+      method: "DELETE",
       url: `/employees/${id}`,
       headers,
     })
     return Promise.resolve(data)
-  } catch(e) {
+  } catch (e) {
     console.error(e)
     return Promise.reject(e)
   }
 }
 
-export { getAllEmployees, getHistoryById, updateEmployee, deleteEmployee }
+export {
+  getAllEmployees,
+  getHistoryById,
+  updateEmployee,
+  deleteEmployee,
+  getEmployeesByDepartment,
+}

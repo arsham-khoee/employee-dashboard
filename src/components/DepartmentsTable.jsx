@@ -5,6 +5,7 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
+import { useNavigate } from "react-router-dom"
 
 const createData = (name, employeeCount) => {
   return { name, employeeCount }
@@ -20,7 +21,8 @@ const rows = [
   createData("Technical", 59),
 ]
 
-export default function DepartmentsTable({departments}) {
+export default function DepartmentsTable({ departments }) {
+  const navigate = useNavigate()
 
   return (
     <TableContainer component={Paper}>
@@ -36,10 +38,15 @@ export default function DepartmentsTable({departments}) {
             <TableRow
               key={department.id}
               sx={{
+                pointerEvents: department.employeeCount === 0 ? "none" : "auto",
                 "&:last-child td, &:last-child th": { border: 0 },
-                "&:hover": { backgroundColor: "#eee", cursor: "pointer" },
+                "&:hover": {
+                  backgroundColor: "#eee",
+                  cursor:
+                    department.employeeCount === 0 ? "not-allowed" : "pointer",
+                },
               }}
-              onClick={() => selectDepartment(department)}
+              onClick={() => navigate(`/employee/department/${department.id}`)}
             >
               <TableCell component="th" scope="row">
                 {department.name}

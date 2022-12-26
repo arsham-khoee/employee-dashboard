@@ -7,6 +7,7 @@ import ErrorPage from "./pages/ErrorPage"
 import LoginPage from "./pages/LoginPage"
 import SignupPage from "./pages/SignupPage"
 import AddEmployee from './pages/AddEmployee'
+import DepartmentDetails from "./pages/DepartmentDetails"
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: "employees",
         element: <EmployeesPage />,
+      },
+      {
+        path: "employee/department/:id",
+        element: <DepartmentDetails />,
       },
       {
         path: "departments",
