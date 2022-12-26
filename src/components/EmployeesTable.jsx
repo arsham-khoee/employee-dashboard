@@ -14,10 +14,15 @@ import Paper from "@mui/material/Paper"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import EditIcon from "@mui/icons-material/Edit"
-import { Button, Modal, TextField } from "@mui/material"
+import { Button, MenuItem, Modal, Select, TextField } from "@mui/material"
 import TheModal from "./TheModal"
-import { getHistoryById, updateEmployee, deleteEmployee} from "../services/employee"
+import {
+  getHistoryById,
+  updateEmployee,
+  deleteEmployee,
+} from "../services/employee"
 import { useAuth } from "../context/AuthContext"
+import { getAllDepartments } from "../services/department"
 
 function createData(
   firstName,
@@ -39,15 +44,18 @@ function createData(
   }
 }
 
-function Row({ row, setSelectedEmployee, openModal }) {
+function Row({ row, setSelectedEmployee, openModal, setDepartments }) {
   const [open, setOpen] = useState(false)
   const [history, setHistory] = useState([])
   const { headers, user } = useAuth()
 
-  const handleEdit = (row) => {
+  const handleEdit = async (row) => {
     setSelectedEmployee(row)
     openModal()
+    const departments = await getAllDepartments(headers)
+    setDepartments(departments)
     console.log(row)
+    console.log(departments)
   }
 
   const getHistory = async (id) => {
@@ -56,7 +64,6 @@ function Row({ row, setSelectedEmployee, openModal }) {
     console.log("history", data)
     setOpen(!open)
   }
-
 
   return (
     <>
@@ -84,7 +91,7 @@ function Row({ row, setSelectedEmployee, openModal }) {
           <IconButton
             aria-label="edit"
             size="small"
-            disabled={user.role !== 'ADMIN'}
+            disabled={user.role !== "ADMIN"}
             onClick={() => handleEdit(row)}
           >
             <EditIcon />
@@ -115,7 +122,11 @@ function Row({ row, setSelectedEmployee, openModal }) {
                           ? historyRow.previousDepartment.name
                           : "-"}
                       </TableCell>
-                      <TableCell>{historyRow.currentDepartment ? historyRow.currentDepartment.name : "-"}</TableCell>
+                      <TableCell>
+                        {historyRow.currentDepartment
+                          ? historyRow.currentDepartment.name
+                          : "-"}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -131,28 +142,41 @@ function Row({ row, setSelectedEmployee, openModal }) {
 export default function EmployeesTable({ employees, setEmployees }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState(null)
+  const [departments, setDepartments] = useState([])
   const { headers } = useAuth()
 
   const handleUpdate = async (e) => {
     try {
       e.preventDefault()
       console.log("selectedEmployee", selectedEmployee)
-      const data = await updateEmployee(selectedEmployee.id, selectedEmployee, headers)
-      setEmployees(prev => prev.map(item => item.id == selectedEmployee.id ? selectedEmployee : item ))
+      const data = await updateEmployee(
+        selectedEmployee.id,
+        selectedEmployee,
+        headers
+      )
+      console.log("req:", selectedEmployee)
+      console.log("data:", data)
+      setEmployees((prev) =>
+        prev.map((item) =>
+          item.id == selectedEmployee.id ? selectedEmployee : item
+        )
+      )
       setIsModalOpen(false)
-    } catch(e) {
+    } catch (e) {
       console.log(e)
     }
   }
 
-  const handleDelete = async(e) => {
+  const handleDelete = async (e) => {
     try {
       e.preventDefault()
       await deleteEmployee(selectedEmployee.id, headers)
-      setEmployees(prev => prev.filter(item => item.id !== selectedEmployee.id))
+      setEmployees((prev) =>
+        prev.filter((item) => item.id !== selectedEmployee.id)
+      )
       setIsModalOpen(false)
-    } catch(e) {
-      console.log('error')
+    } catch (e) {
+      console.log("error")
       console.log(e)
     }
   }
@@ -180,6 +204,7 @@ export default function EmployeesTable({ employees, setEmployees }) {
                 row={row}
                 setSelectedEmployee={setSelectedEmployee}
                 openModal={() => setIsModalOpen(true)}
+                setDepartments={setDepartments}
               />
             ))}
           </TableBody>
@@ -279,6 +304,30 @@ export default function EmployeesTable({ employees, setEmployees }) {
                 }))
               }
             />
+            <Select
+              sx={{ flexGrow: "1" }}
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              value={
+                selectedEmployee?.department ? selectedEmployee.department : ""
+              }
+              onChange={(e) =>
+                setSelectedEmployee((prev) => ({
+                  ...prev,
+                  department: e.target.value,
+                }))
+              }
+              label="Age"
+            >
+              <MenuItem value={null}>
+                <em>None</em>
+              </MenuItem>
+              {departments.map((department) => (
+                <MenuItem key={department.id} value={department.id}>
+                  {department.name}
+                </MenuItem>
+              ))}
+            </Select>
           </Box>
           <Box
             sx={{
@@ -291,7 +340,11 @@ export default function EmployeesTable({ employees, setEmployees }) {
             <Button variant="contained" type="submit">
               Update
             </Button>
-            <Button onClick={(e) => handleDelete(e)}  variant="outlined" color="error">
+            <Button
+              onClick={(e) => handleDelete(e)}
+              variant="outlined"
+              color="error"
+            >
               Delete
             </Button>
           </Box>

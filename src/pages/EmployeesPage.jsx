@@ -4,20 +4,19 @@ import TextField from "@mui/material/TextField"
 import EmployeesTable from "../components/EmployeesTable"
 import React, { useEffect, useState } from "react"
 import { getAllEmployees } from "../services/employee"
-import { useAuth } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useAuth } from "../context/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 const handleSearch = (e) => {
   if (e.key === "Enter") console.log("Do search")
 }
-
 
 function EmployeesPage() {
   const [employees, setEmployees] = useState([])
   const { headers, token } = useAuth()
   const navigate = useNavigate()
   if (!token) {
-    navigate('/auth/login')
+    navigate("/auth/login")
   }
 
   useEffect(() => {
@@ -28,9 +27,9 @@ function EmployeesPage() {
   const getEmployees = async () => {
     try {
       const data = await getAllEmployees(headers)
-      setEmployees(() => ([...data]))
+      setEmployees(() => [...data])
     } catch (e) {
-      console.log('error')
+      console.log("error")
       console.log(e)
     }
   }
@@ -45,15 +44,17 @@ function EmployeesPage() {
           marginBottom: "24px",
         }}
       >
-        <TextField
+        {/* <TextField
           id="search"
           label="Search table entries..."
           type="search"
           variant="standard"
           onKeyDown={handleSearch}
-        />
+        /> */}
         <Box sx={{ marginLeft: "auto" }}>
-          <Button onClick={() => navigate('')}>Add Employee</Button>
+          <Button onClick={() => navigate("add")}>
+            Add Employee
+          </Button>
         </Box>
       </Box>
       <Box>

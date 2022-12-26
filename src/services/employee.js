@@ -41,14 +41,15 @@ const getHistoryById = async (id, headers) => {
 
 const updateEmployee = async (
   id,
-  { firstName, lastName, role, address },
+  { firstName, lastName, role, address, department },
   headers
 ) => {
   try {
+    console.log("xxx", { firstName, lastName, role, address, department })
     const { data } = await axiosInstance({
       method: "PATCH",
       url: `/employees/${id}`,
-      data: { firstName, lastName, role, address },
+      data: { firstName, lastName, role, address, departmentId: department },
       headers,
     })
     return Promise.resolve(data)
