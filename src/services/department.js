@@ -13,4 +13,19 @@ const getAllDepartments = async (headers) => {
   }
 }
 
-export { getAllDepartments }
+const addDepartment = async (name, headers) => {
+  try {
+    const { data } = await axiosInstance({
+      method: "POST",
+      url: "/departments",
+      headers,
+      data: name,
+    })
+    return Promise.resolve(data)
+  } catch (err) {
+    console.error(err)
+    return Promise.reject(err)
+  }
+}
+
+export { getAllDepartments, addDepartment }
