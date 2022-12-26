@@ -4,7 +4,7 @@ const getAllEmployees = async (headers) => {
   try {
     const { data } = await axiosInstance({
       url: "/employees",
-      headers
+      headers,
     })
     return Promise.resolve(data)
   } catch (err) {
@@ -72,17 +72,24 @@ const deleteEmployee = async (id, headers) => {
   }
 }
 
-const createEmployee = async(data, headers) => {
+const createEmployee = async (data, headers) => {
   try {
     await axiosInstance({
-      method: 'POST',
-      url: '/employees',
+      method: "POST",
+      url: "/employees",
       data,
-      headers
+      headers,
     })
-  } catch(err) {
+  } catch (err) {
     console.log(err)
   }
 }
 
-export { getAllEmployees, getHistoryById, updateEmployee, deleteEmployee, createEmployee }
+export {
+  getAllEmployees,
+  getEmployeesByDepartment,
+  getHistoryById,
+  updateEmployee,
+  deleteEmployee,
+  createEmployee,
+}
