@@ -21,7 +21,7 @@ const updateEmployee = async (id, userData, headers) => {
     return Promise.resolve(data)
   } catch (err) {
     console.error(err)
-    Promise.reject(err)
+    return Promise.reject(err)
   }
 }
 
