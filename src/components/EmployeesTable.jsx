@@ -16,6 +16,8 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import EditIcon from "@mui/icons-material/Edit"
 import { Button, Modal } from "@mui/material"
 import TheModal from "./TheModal"
+import { getHistoryById } from "../services/employee"
+import { useAuth } from "../context/AuthContext"
 
 function createData(
   firstName,
@@ -37,32 +39,20 @@ function createData(
   }
 }
 
-// Row.propTypes = {
-//   row: PropTypes.shape({
-//     firstName: PropTypes.string.isRequired,
-//     lastName: PropTypes.string.isRequired,
-//     email: PropTypes.string.isRequired,
-//     address: PropTypes.string.isRequired,
-//     role: PropTypes.string.isRequired,
-//     jobTitle: PropTypes.string.isRequired,
-//     history: PropTypes.arrayOf(
-//       PropTypes.shape({
-//         previousDepartment: PropTypes.string.isRequired,
-//         currentDepartment: PropTypes.string.isRequired,
-//         assignor: PropTypes.string.isRequired,
-//         date: PropTypes.string.isRequired,
-//       })
-//     ).isRequired,
-//   }).isRequired
-//   setSelectedEmployee
-// }
-
 function Row({ row, setSelectedEmployee }) {
-  // const { row } = props
   const [open, setOpen] = useState(false)
+  const [history, setHistory] = useState([])
+  const { headers } = useAuth()
 
   const handleEdit = (row) => {
     console.log(row)
+  }
+
+  const getHistory = async(id) => {
+    const data = await getHistoryById(id, headers)
+    setHistory(data)
+    console.log('history', data)
+    setOpen(!open)
   }
 
   return (
@@ -72,7 +62,7 @@ function Row({ row, setSelectedEmployee }) {
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
+            onClick={() => getHistory(row.id)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -107,21 +97,21 @@ function Row({ row, setSelectedEmployee }) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
+                    {/* <TableCell>Date</TableCell> */}
                     <TableCell>Assignor</TableCell>
                     <TableCell>Previous Department</TableCell>
                     <TableCell>Current Department</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
+                  {history.map((historyRow) => (
+                    <TableRow key={historyRow.id}>
+                      {/* <TableCell component="th" scope="row">
                         {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.assignor}</TableCell>
-                      <TableCell>{historyRow.previousDepartment}</TableCell>
-                      <TableCell>{historyRow.currentDepartment}</TableCell>
+                      </TableCell> */}
+                      <TableCell>{historyRow.assignor.email}</TableCell>
+                      <TableCell>{historyRow.previousDepartment ? historyRow.previousDepartment.name : '-'}</TableCell>
+                      <TableCell>{historyRow.currentDepartment.name}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -134,18 +124,8 @@ function Row({ row, setSelectedEmployee }) {
   )
 }
 
-const rows = [
-  createData("ali", "alavi", "ali@gmail.com", "asd", "bbb", "ccc", [
-    {
-      previousDepartment: "aaa",
-      currentDepartment: "aaa",
-      assignor: "44",
-      date: "asd",
-    },
-  ]),
-]
-
-export default function EmployeesTable() {
+export default function EmployeesTable({ employees }) {
+  console.log('props table', employees)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState(null)
 
@@ -170,7 +150,7 @@ export default function EmployeesTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {employees.map((row) => (
               <Row
                 key={row.email}
                 row={row}
