@@ -14,6 +14,8 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import ApartmentIcon from "@mui/icons-material/Apartment"
 import LogoutIcon from "@mui/icons-material/Logout"
 import { Link, Outlet } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 const drawerWidth = 200
 
@@ -36,7 +38,16 @@ const navMenu = [
   },
 ]
 
-export default function ClippedDrawer() {
+export default function MainLayout() {
+  const { dispatch } = useAuth()
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    console.log("logout")
+    dispatch({ type: "LOGOUT" })
+    navigate("/auth/login")
+  }
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -76,14 +87,12 @@ export default function ClippedDrawer() {
                 style={{
                   textDecoration: "none",
                   color: "inherit",
-                  marginTop: index === 3 ? "auto" : "",
+                  marginTop: item.label === "Logout" ? "auto" : "",
                 }}
-                to={item.label}
+                onClick={item.label === "Logout" && handleLogout}
+                to={item.label === "Logout" ? "#" : item.label}
               >
-                <ListItem
-                  key={item.label}
-                  disablePadding
-                >
+                <ListItem key={item.label} disablePadding>
                   <ListItemButton>
                     <ListItemIcon>{item.icon}</ListItemIcon>
                     <ListItemText primary={item.label} />

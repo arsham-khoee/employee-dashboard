@@ -37,7 +37,7 @@ export default function LoginPage() {
       })
       if (payload.token) dispatch({ type: "LOGIN", payload })
 
-      navigate("/employees")
+      setTimeout(() => navigate("/employees"), 1000)
     } catch (err) {
       console.error(err)
     }
