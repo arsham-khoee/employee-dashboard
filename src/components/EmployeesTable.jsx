@@ -115,7 +115,7 @@ function Row({ row, setSelectedEmployee, openModal }) {
                           ? historyRow.previousDepartment.name
                           : "-"}
                       </TableCell>
-                      <TableCell>{historyRow.currentDepartment.name}</TableCell>
+                      <TableCell>{historyRow.currentDepartment ? historyRow.currentDepartment.name : "-"}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

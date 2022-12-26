@@ -20,7 +20,8 @@ const rows = [
   createData("Technical", 59),
 ]
 
-export default function DepartmentsTable() {
+export default function DepartmentsTable({departments}) {
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 450 }} aria-label="simple table">
@@ -31,19 +32,19 @@ export default function DepartmentsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {departments.map((department) => (
             <TableRow
-              key={row.name}
+              key={department.id}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
                 "&:hover": { backgroundColor: "#eee", cursor: "pointer" },
               }}
-              onClick={() => selectDepartment(row)}
+              onClick={() => selectDepartment(department)}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {department.name}
               </TableCell>
-              <TableCell>{row.employeeCount}</TableCell>
+              <TableCell>{department.employeeCount}</TableCell>
             </TableRow>
           ))}
         </TableBody>
