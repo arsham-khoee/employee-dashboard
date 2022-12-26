@@ -5,7 +5,7 @@ import EmployeesTable from "../components/EmployeesTable"
 import React, { useEffect, useState } from "react"
 import { getAllEmployees } from "../services/employee"
 import { useAuth } from '../context/AuthContext'
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 
 const handleSearch = (e) => {
   if (e.key === "Enter") console.log("Do search")
@@ -53,8 +53,7 @@ function EmployeesPage() {
           onKeyDown={handleSearch}
         />
         <Box sx={{ marginLeft: "auto" }}>
-          <Button>Import CSV</Button>
-          <Button>Add Manually</Button>
+          <Button onClick={() => navigate('')}>Add Employee</Button>
         </Box>
       </Box>
       <Box>

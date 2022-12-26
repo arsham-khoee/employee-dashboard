@@ -17,7 +17,7 @@ const reducer = (state, action) => {
 const initState = () => {
     const token = localStorage.getItem('token')
     let headers = null
-    let user = localStorage.getItem('employee')
+    let user = localStorage.getItem('user')
     user = JSON.parse(user)
     if(token) {
         headers = { authorization: token }

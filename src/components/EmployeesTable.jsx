@@ -43,8 +43,6 @@ function Row({ row, setSelectedEmployee, openModal }) {
   const [open, setOpen] = useState(false)
   const [history, setHistory] = useState([])
   const { headers, user } = useAuth()
-  console.log('fuck you')
-  console.log(user)
 
   const handleEdit = (row) => {
     setSelectedEmployee(row)

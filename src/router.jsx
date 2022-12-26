@@ -6,12 +6,13 @@ import ProfilePage from "./pages/ProfilePage"
 import ErrorPage from "./pages/ErrorPage"
 import LoginPage from "./pages/LoginPage"
 import SignupPage from "./pages/SignupPage"
+import AddEmployee from './pages/AddEmployee'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    errorElement: <ErrorPage />, // 404 page
+    // errorElement: <ErrorPage />, // 404 page
     children: [
       // {
       //   index: true, // Loads at '/'
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         path: "profile",
         element: <ProfilePage />,
       },
+      {
+        path: 'employees/add',
+        element: <AddEmployee />
+      }
     ],
   },
   {
