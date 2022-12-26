@@ -11,12 +11,13 @@ const handleSearch = (e) => {
 
 function EmployeesPage() {
   useEffect(() => {
-    const getEmployees = async () => {
-      const data = await getAllEmployees()
-      console.log(data)
-    }
+    console.log("asd")
+    // const getEmployees = async () => {
+    //   const data = await getAllEmployees()
+    //   console.log(data)
+    // }
 
-    getEmployees()
+    // getEmployees()
   }, [])
 
   return (

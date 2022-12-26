@@ -1,6 +1,6 @@
 import axiosInstance from "../../axios.config"
 
-const getAllEmployees = async () => {
+const getAllEmployees = async ({header}) => {
   try {
     const { data } = await axiosInstance.get("/employees")
     return Promise.resolve(data)

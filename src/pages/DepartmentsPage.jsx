@@ -1,8 +1,21 @@
-import React from 'react'
+import { Box, Button } from "@mui/material"
+import React from "react"
+import DepartmentsTable from "../components/DepartmentsTable"
 
 function DepartmentsPage() {
   return (
-    <div>DepartmentsPage</div>
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: "24px",
+        }}
+      >
+        <Button>Add Manually</Button>
+      </Box>
+      <DepartmentsTable />
+    </>
   )
 }
 

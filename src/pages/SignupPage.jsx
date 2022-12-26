@@ -36,6 +36,9 @@ export default function LoginPage() {
     setIsPasswordMatch(areMatch)
 
     try {
+      console.log("mail", isEmailVaild)
+      console.log("pass", isPasswordVaild)
+      console.log("match", areMatch)
       if (isEmailVaild && isPasswordVaild && areMatch) {
         const payload = await signup({
           email: data.get("email"),
