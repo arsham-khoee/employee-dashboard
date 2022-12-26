@@ -55,4 +55,17 @@ const deleteEmployee = async(id, headers) => {
   }
 }
 
-export { getAllEmployees, getHistoryById, updateEmployee, deleteEmployee }
+const createEmployee = async(data, headers) => {
+  try {
+    await axiosInstance({
+      method: 'POST',
+      url: '/employees',
+      data,
+      headers
+    })
+  } catch(err) {
+    console.log(err)
+  }
+}
+
+export { getAllEmployees, getHistoryById, updateEmployee, deleteEmployee, createEmployee }
