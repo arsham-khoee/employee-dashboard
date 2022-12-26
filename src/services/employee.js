@@ -1,8 +1,8 @@
 import axiosInstance from "../../axios.config"
 
-const getAllEmployees = async ({header}) => {
+const getAllEmployees = async ({ headers }) => {
   try {
-    const { data } = await axiosInstance.get("/employees")
+    const { data } = await axiosInstance.get("/employees", { headers })
     return Promise.resolve(data)
   } catch (err) {
     console.error(err)
@@ -10,4 +10,19 @@ const getAllEmployees = async ({header}) => {
   }
 }
 
-export { getAllEmployees }
+const updateEmployee = async (id, userData, headers) => {
+  try {
+    const { data } = await axiosInstance({
+      method: "PATCH",
+      url: `/employees/${id}`,
+      data: userData,
+      headers,
+    })
+    return Promise.resolve(data)
+  } catch (err) {
+    console.error(err)
+    Promise.reject(err)
+  }
+}
+
+export { getAllEmployees, updateEmployee }

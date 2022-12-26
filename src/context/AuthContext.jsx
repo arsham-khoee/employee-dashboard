@@ -34,7 +34,7 @@ const saveToken = (state, { payload }) => {
     const { user, token } = payload
     const headers = { authorization: token }
     localStorage.setItem('user', JSON.stringify(user))
-    localStorage.setItem('token', JSON.stringify(token))
+    localStorage.setItem('token', token)
     return {
         ...state,
         token,
