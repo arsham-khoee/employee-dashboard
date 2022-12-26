@@ -14,7 +14,7 @@ import Paper from "@mui/material/Paper"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown"
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp"
 import EditIcon from "@mui/icons-material/Edit"
-import { Button, Modal } from "@mui/material"
+import { Button, Modal, TextField } from "@mui/material"
 import TheModal from "./TheModal"
 import { getHistoryById } from "../services/employee"
 import { useAuth } from "../context/AuthContext"
@@ -39,19 +39,21 @@ function createData(
   }
 }
 
-function Row({ row, setSelectedEmployee }) {
+function Row({ row, setSelectedEmployee, openModal }) {
   const [open, setOpen] = useState(false)
   const [history, setHistory] = useState([])
   const { headers } = useAuth()
 
   const handleEdit = (row) => {
+    setSelectedEmployee(row)
+    openModal()
     console.log(row)
   }
 
-  const getHistory = async(id) => {
+  const getHistory = async (id) => {
     const data = await getHistoryById(id, headers)
     setHistory(data)
-    console.log('history', data)
+    console.log("history", data)
     setOpen(!open)
   }
 
@@ -81,7 +83,7 @@ function Row({ row, setSelectedEmployee }) {
           <IconButton
             aria-label="edit"
             size="small"
-            onClick={() => setSelectedEmployee(row)}
+            onClick={() => handleEdit(row)}
           >
             <EditIcon />
           </IconButton>
@@ -110,7 +112,11 @@ function Row({ row, setSelectedEmployee }) {
                         {historyRow.date}
                       </TableCell> */}
                       <TableCell>{historyRow.assignor.email}</TableCell>
-                      <TableCell>{historyRow.previousDepartment ? historyRow.previousDepartment.name : '-'}</TableCell>
+                      <TableCell>
+                        {historyRow.previousDepartment
+                          ? historyRow.previousDepartment.name
+                          : "-"}
+                      </TableCell>
                       <TableCell>{historyRow.currentDepartment.name}</TableCell>
                     </TableRow>
                   ))}
@@ -125,12 +131,12 @@ function Row({ row, setSelectedEmployee }) {
 }
 
 export default function EmployeesTable({ employees }) {
-  console.log('props table', employees)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedEmployee, setSelectedEmployee] = useState(null)
 
-  const handleModal = () => {
-    setIsModalOpen(true)
+  const handleUpdate = (e) => {
+    e.preventDefault()
+    console.log("selectedEmployee", selectedEmployee)
   }
 
   return (
@@ -155,22 +161,122 @@ export default function EmployeesTable({ employees }) {
                 key={row.email}
                 row={row}
                 setSelectedEmployee={setSelectedEmployee}
+                openModal={() => setIsModalOpen(true)}
               />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Button onClick={handleModal}>Open modal</Button>
       <TheModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}>
         <Box
+          component="form"
+          onSubmit={handleUpdate}
           sx={{
             width: "min(90%, 800px)",
             backgroundColor: "#fff",
-            padding: "20px",
+            padding: "45px 30px",
           }}
         >
-          <div>{selectedEmployee}</div>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "20px",
+              justifyContent: "space-between",
+              marginBottom: "50px",
+            }}
+          >
+            <TextField
+              id="firstName"
+              label="First Name"
+              type="text"
+              variant="standard"
+              value={selectedEmployee?.firstName}
+              onChange={(e) =>
+                setSelectedEmployee((prev) => ({
+                  ...prev,
+                  firstName: e.target.value,
+                }))
+              }
+            />
+            <TextField
+              id="lastName"
+              label="Last Name"
+              type="text"
+              variant="standard"
+              value={selectedEmployee?.lastName}
+              onChange={(e) =>
+                setSelectedEmployee((prev) => ({
+                  ...prev,
+                  lastName: e.target.value,
+                }))
+              }
+            />
+            <TextField
+              id="role"
+              label="Role"
+              type="text"
+              variant="standard"
+              value={selectedEmployee?.role}
+              onChange={(e) =>
+                setSelectedEmployee((prev) => ({
+                  ...prev,
+                  role: e.target.value,
+                }))
+              }
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "20px",
+              justifyContent: "center",
+            }}
+          >
+            <TextField
+              sx={{ flexGrow: "2" }}
+              id="address"
+              label="Address"
+              type="text"
+              variant="standard"
+              value={selectedEmployee?.address ? selectedEmployee.address : ""}
+              onChange={(e) =>
+                setSelectedEmployee((prev) => ({
+                  ...prev,
+                  address: e.target.value,
+                }))
+              }
+            />
+            <TextField
+              sx={{ flexGrow: "1" }}
+              id="jobTitle"
+              label="Job Title"
+              type="text"
+              variant="standard"
+              value={selectedEmployee?.jobTitle}
+              onChange={(e) =>
+                setSelectedEmployee((prev) => ({
+                  ...prev,
+                  jobTitle: e.target.value,
+                }))
+              }
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "20px",
+              justifyContent: "center",
+              marginTop: "50px",
+            }}
+          >
+            <Button variant="contained" type="submit">
+              Update
+            </Button>
+            <Button variant="outlined" color="error">
+              Delete
+            </Button>
+          </Box>
         </Box>
       </TheModal>
     </>
