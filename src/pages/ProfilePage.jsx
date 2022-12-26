@@ -68,27 +68,36 @@ function ProfilePage() {
           onSubmit={handleProfileUpdate}
           sx={{
             display: "flex",
-            flexWrap: "wrap",
+            flexDirection: "column",
+            maxWidth: "408px",
+            width: "60%",
             gap: "20px",
             justifyContent: "center",
           }}
         >
-          <TextField
-            id="firstName"
-            label="First Name"
-            type="text"
-            variant="standard"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <TextField
-            id="lastName"
-            label="Last Name"
-            type="text"
-            variant="standard"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <Box
+            sx={{
+              display: "flex",
+              gap: "20px",
+            }}
+          >
+            <TextField
+              id="firstName"
+              label="First Name"
+              type="text"
+              variant="standard"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <TextField
+              id="lastName"
+              label="Last Name"
+              type="text"
+              variant="standard"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </Box>
           <TextField
             sx={{ width: "100%", maxWidth: "408px" }}
             id="email"
